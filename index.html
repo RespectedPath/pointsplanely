@@ -1,85 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Points Planely</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #FBF9F1;
       font-family: Arial, sans-serif;
+      background-color: #FBF9F1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
+      padding: 2rem;
+      color: #333;
     }
-
-    img {
-      width: 270px;
-      margin-bottom: 20px;
-    }
-
     h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
+      font-size: 2rem;
+      color: #2C3E50;
     }
-
     p {
-      font-size: 1.2em;
       max-width: 600px;
-      margin-bottom: 30px;
+      text-align: center;
+      margin-bottom: 2rem;
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    input[type="email"] {
-      padding: 10px;
-      font-size: 1em;
-      width: 250px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      background-color: #AAD7D9;
-      color: #000;
-      border: none;
-      padding: 12px 20px;
-      font-size: 1em;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: background-color 0.2s;
-    }
-
-    button:hover {
-      background-color: #92C7CF;
-    }
-
-    small {
-      margin-top: 10px;
-      color: #666;
+    img {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 2rem;
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Points Planely Logo">
+  <img src="logo.png" alt="Points Planely Logo" />
   <h1>Travel points explained — plainly.</h1>
-  <p>Learn how to earn, search, and use your credit card travel points. We’re still taxing for departure — subscribe for updates.</p>
+  <p>Learn how to earn, search and use your credit card travel points. Sign up now to stay updated!</p>
 
-  <form action="https://7b6c-45-134-140-24.ngrok-free.app/subscription/form" method="POST">
-    <input type="email" name="email" placeholder="Your email" required>
-    <input type="hidden" name="l" value="3">
-    <button type="submit">Subscribe</button>
-    <small>No spam, just points.</small>
+  <form
+    id="subscribe-form"
+    action="https://7b6c-45-134-140-24.ngrok-free.app/subscription/form"
+    method="POST"
+    style="margin-top: 2rem; display: flex; flex-direction: column; align-items: center;"
+  >
+    <input type="hidden" name="list_id" value="82bb45fe-422d-450d-98e3-c7271c8697ca" />
+
+    <label for="email" style="font-size: 1.1rem; margin-bottom: 0.5rem;">Sign up to stay updated:</label>
+
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      placeholder="you@example.com"
+      style="padding: 0.5rem 1rem; font-size: 1rem; width: 280px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 1rem;"
+    />
+
+    <button
+      type="submit"
+      style="background-color: #92C7CF; color: #fff; border: none; padding: 0.6rem 1.4rem; font-size: 1rem; border-radius: 6px; cursor: pointer;"
+    >
+      Subscribe
+    </button>
+
+    <div id="message" style="margin-top: 1rem; font-size: 1rem;"></div>
   </form>
+
+  <script>
+    const form = document.getElementById('subscribe-form');
+    const messageBox = document.getElementById('message');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      messageBox.textContent = "Submitting...";
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          messageBox.style.color = "green";
+          messageBox.textContent = "You're almost in! Check your inbox to confirm your subscription.";
+          form.reset();
+        } else {
+          throw new Error(result.message || "Something went wrong.");
+        }
+      } catch (error) {
+        messageBox.style.color = "red";
+        messageBox.textContent = "Oops! That didn’t work. Please try again.";
+      }
+    });
+  </script>
 </body>
 </html>
