@@ -1,41 +1,96 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Points Planely</title>
   <style>
     body {
+      margin: 0;
       background-color: #FBF9F1;
       font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
       text-align: center;
-      color: #333;
-      flex-direction: column;
-      padding: 1em;
+      padding: 2rem;
     }
-    img {
-      max-width: 500px;
-      margin-bottom: 20px;
+    img.logo {
+      width: 250px;
+      max-width: 90%;
+      margin-bottom: 1rem;
     }
     h1 {
-      font-size: 2em;
-      margin-bottom: 0.2em;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
-    p {
+    p.tagline {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #444;
+    }
+    form {
       max-width: 400px;
-      margin: 0.5em auto;
+      margin: 0 auto;
+    }
+    input[type="email"] {
+      padding: 0.75rem 1rem;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      background-color: #92C7CF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 1rem;
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Points Planely Logo">
+
+  <img src="logo.png" alt="Points Planely logo" class="logo">
   <h1>Travel points explained — plainly.</h1>
-  <p>Learn how to earn, search and use your credit card travel points.</p>
-  <p>Site launching soon. Stay tuned!</p>
+  <p class="tagline">Learn how to earn, search, and use your credit card travel points.</p>
+
+  <form id="subscribe-form">
+    <input type="email" id="email" placeholder="Enter your email" required>
+    <br>
+    <button type="submit">✈️ Stay Updated</button>
+    <p id="status"></p>
+  </form>
+
+  <script>
+    document.getElementById("subscribe-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const res = await fetch("http://localhost:9000/api/subscribers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          name: "",
+          lists: [3],
+          status: "enabled"
+        })
+      });
+
+      const status = document.getElementById("status");
+      if (res.ok) {
+        status.innerText = "✅ Confirmation email sent! Check your inbox.";
+      } else {
+        const data = await res.json();
+        status.innerText = "❌ " + (data?.message || "Something went wrong.");
+      }
+    });
+  </script>
+
 </body>
 </html>
