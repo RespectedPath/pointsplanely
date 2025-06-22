@@ -2,95 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Points Planely</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      margin: 0;
       background-color: #FBF9F1;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
       text-align: center;
-      padding: 2rem;
     }
-    img.logo {
-      width: 250px;
-      max-width: 90%;
-      margin-bottom: 1rem;
+
+    img {
+      width: 270px;
+      margin-bottom: 20px;
     }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      font-size: 2em;
+      margin-bottom: 10px;
     }
-    p.tagline {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      color: #444;
+
+    p {
+      font-size: 1.2em;
+      max-width: 600px;
+      margin-bottom: 30px;
     }
+
     form {
-      max-width: 400px;
-      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
+
     input[type="email"] {
-      padding: 0.75rem 1rem;
-      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      width: 250px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      margin-bottom: 1rem;
+      border-radius: 6px;
     }
+
     button {
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      background-color: #92C7CF;
-      color: white;
+      background-color: #AAD7D9;
+      color: #000;
       border: none;
-      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 1em;
       cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.2s;
     }
-    #status {
-      margin-top: 1rem;
-      font-size: 0.95rem;
+
+    button:hover {
+      background-color: #92C7CF;
+    }
+
+    small {
+      margin-top: 10px;
+      color: #666;
     }
   </style>
 </head>
 <body>
-
-  <img src="logo.png" alt="Points Planely logo" class="logo">
+  <img src="logo.png" alt="Points Planely Logo">
   <h1>Travel points explained — plainly.</h1>
-  <p class="tagline">Learn how to earn, search, and use your credit card travel points.</p>
+  <p>Learn how to earn, search, and use your credit card travel points. We’re still taxing for departure — subscribe for updates.</p>
 
-  <form id="subscribe-form">
-    <input type="email" id="email" placeholder="Enter your email" required>
-    <br>
-    <button type="submit">✈️ Stay Updated</button>
-    <p id="status"></p>
+  <form action="https://7b6c-45-134-140-24.ngrok-free.app/subscription/form" method="POST">
+    <input type="email" name="email" placeholder="Your email" required>
+    <input type="hidden" name="l" value="3">
+    <button type="submit">Subscribe</button>
+    <small>No spam, just points.</small>
   </form>
-
-  <script>
-    document.getElementById("subscribe-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const email = document.getElementById("email").value;
-      const res = await fetch("http://localhost:9000/api/subscribers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          name: "",
-          lists: [3],
-          status: "enabled"
-        })
-      });
-
-      const status = document.getElementById("status");
-      if (res.ok) {
-        status.innerText = "✅ Confirmation email sent! Check your inbox.";
-      } else {
-        const data = await res.json();
-        status.innerText = "❌ " + (data?.message || "Something went wrong.");
-      }
-    });
-  </script>
-
 </body>
 </html>
